@@ -1,0 +1,17 @@
+Package: generatr
+Type: Package
+Title: Pythonesque generator data type and methods
+Version: 0.1.0
+Author: Authors@R: person("Chris", "Muir", email = "chrismuirrva@gmail.com", role = c("aut", "cre"))
+Maintainer: Chris Muir <chrismuirrva@gmail.com>
+Description: Provides an implementation of a generator data type with methods, designed to be similar to generator 
+    objects in Python. For more information on Python generators, see <https://wiki.python.org/moin/Generators>.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: Rcpp
+LinkingTo: Rcpp
+Suggests: pryr, stringi
+RoxygenNote: 6.0.1
+URL: https://github.com/ChrisMuir/generatr
+BugReports: https://github.com/ChrisMuir/generatr/issues

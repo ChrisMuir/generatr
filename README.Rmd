@@ -1,0 +1,113 @@
+---
+output: 
+  github_document: default
+  html_document: default
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# generatr
+
+This package is an attempt at an implementation of a "Pythonesque" generator data type and methods. It didn't work out 100% ... there's no magic `yield` method :( ... but I figured I'd share it anyways, incase anyone might find it useful.
+
+See [here](https://wiki.python.org/moin/Generators) for more information on Python generators.
+
+## Installation
+
+Install from github with:
+```{r eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("ChrisMuir/generatr")
+```
+
+## Example Usage
+
+```{r}
+library(generatr)
+```
+
+Initialize a new `generator` object with an R vector
+```{r}
+gen <- gen_init_with_vector(c(1L, 5L, 20L, 45L))
+```
+
+Check the class of the object `gen`
+```{r}
+class(gen)
+```
+
+Use `gen_next()` to get the next value from a `generator` object, similar to Python's `__next__()`
+```{r}
+for (i in 1:4) {
+  print(gen_next(gen))
+}
+```
+
+Use `gen_current()` to get the current value from a `generator` object
+```{r}
+gen_current(gen)
+```
+
+Once all values have been exhausted, `gen_next()` will throw a `StopIteration` error
+```{r error=TRUE}
+gen_next(gen)
+```
+
+We can also initialize a new `generator` object as an empty object
+```{r}
+gen <- gen_init_empty(gen_type = "integer")
+```
+
+Again, check the class of object `gen`
+```{r}
+class(gen)
+```
+
+New items can be added one by one
+```{r}
+for (i in c(1L, 5L, 20L, 45L)) {
+  gen_add_element(gen, i)
+}
+```
+
+Once we're finished adding items, `gen_next()` and `gen_current()` work just like they did in the previous example
+```{r}
+for (i in 1:4) {
+  print(gen_next(gen))
+}
+```
+
+Currently, the only data type supported are `integer`, `numeric`, `character`, and `logical`
+```{r}
+gen <- gen_init_with_vector(c("cats", "dogs", "ducks", "frogs", "owls"))
+for (i in 1:5) {
+  print(gen_next(gen))
+}
+```
+
+One useful side effect is that `generator` object sizes are constant and very small. This is due to all data being passed through to C++ functions, and the actual `generator` R object is just a pointer to the input data.
+```{r}
+library(pryr)
+library(stringi)
+
+x <- 1L:10000000L
+pryr::object_size(x)
+
+gen <- gen_init_with_vector(x)
+pryr::object_size(gen)
+
+x <- stringi::stri_rand_strings(400000, 8)
+pryr::object_size(x)
+
+gen <- gen_init_with_vector(x)
+pryr::object_size(gen)
+```
+
