@@ -3,7 +3,7 @@
 generatr
 ========
 
-This package is an attempt at an implementation of a "Pythonesque" generator data type and methods. It didn't work out 100% ... there's no magic `yield` method :( ... but I figured I'd share it anyways, incase anyone might find it useful.
+This package is an attempt at an implementation of a "Pythonesque" generator data type and methods. It didn't work out 100% ... there's no magic `yield` method :( ... but I figured I'd share it anyways, in case anyone might find it useful.
 
 See [here](https://wiki.python.org/moin/Generators) for more information on Python generators.
 
@@ -96,7 +96,7 @@ for (i in 1:4) {
 #> [1] 45
 ```
 
-Currently, the only data type supported are `integer`, `numeric`, `character`, and `logical`
+Currently, the only data types supported are `integer`, `numeric`, `character`, and `logical`
 
 ``` r
 gen <- gen_init_with_vector(c("cats", "dogs", "ducks", "frogs", "owls"))
@@ -108,27 +108,4 @@ for (i in 1:5) {
 #> [1] "ducks"
 #> [1] "frogs"
 #> [1] "owls"
-```
-
-One useful side effect is that `generator` object sizes are constant and very small. This is due to all data being passed through to C++ functions, and the actual `generator` R object is just a pointer to the input data.
-
-``` r
-library(pryr)
-library(stringi)
-
-x <- 1L:10000000L
-pryr::object_size(x)
-#> 40 MB
-
-gen <- gen_init_with_vector(x)
-pryr::object_size(gen)
-#> 64 B
-
-x <- stringi::stri_rand_strings(400000, 8)
-pryr::object_size(x)
-#> 28.8 MB
-
-gen <- gen_init_with_vector(x)
-pryr::object_size(gen)
-#> 64 B
 ```
